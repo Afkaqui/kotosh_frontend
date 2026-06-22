@@ -1,0 +1,104 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
+import {
+  LayoutDashboard,
+  Video,
+  PawPrint,
+  X,
+  Menu,
+} from 'lucide-react';
+
+const navItems = [
+  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { label: 'Videos', href: '/videos', icon: Video },
+  { label: 'Animales', href: '/animals', icon: PawPrint },
+];
+
+interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ open, onClose }: SidebarProps) {
+  const pathname = usePathname();
+
+  const content = (
+    <div className="flex h-full flex-col">
+      <div className="flex h-16 items-center gap-3 border-b border-gray-200 px-6">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-600 text-sm font-bold text-white">
+          KT
+        </div>
+        <span className="text-lg font-bold text-gray-900">KotoshTech</span>
+        <button
+          onClick={onClose}
+          className="ml-auto rounded-md p-1 text-gray-400 hover:text-gray-600 lg:hidden"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      <nav className="flex-1 space-y-1 px-3 py-4">
+        {navItems.map((item) => {
+          const isActive =
+            pathname === item.href || pathname.startsWith(item.href + '/');
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onClose}
+              className={clsx(
+                'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                isActive
+                  ? 'bg-green-50 text-green-700'
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+              )}
+            >
+              <item.icon className="h-5 w-5" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="border-t border-gray-200 p-4">
+        <p className="text-xs text-gray-400">KotoshTech ML v1.0</p>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden w-64 shrink-0 border-r border-gray-200 bg-white lg:block">
+        {content}
+      </aside>
+
+      {/* Mobile overlay */}
+      {open && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <div
+            className="fixed inset-0 bg-black/30"
+            onClick={onClose}
+          />
+          <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl">
+            {content}
+          </aside>
+        </div>
+      )}
+    </>
+  );
+}
+
+export function SidebarTrigger({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="rounded-md p-2 text-gray-500 hover:bg-gray-100 lg:hidden"
+    >
+      <Menu className="h-5 w-5" />
+    </button>
+  );
+}
