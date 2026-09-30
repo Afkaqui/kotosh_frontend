@@ -68,8 +68,8 @@ export default function AnalysisDetailPage({
           <div>
             <p className="text-sm font-medium text-blue-800">Procesando video...</p>
             <p className="text-xs text-blue-600">
-              Se analizan 2 fotogramas por segundo; un video de 5 minutos tarda aproximadamente 1 a 3 minutos.
-              Esta página se actualiza sola.
+              Se analizan 2 fotogramas por segundo. Con unas 10 vacas en cámara, el análisis tarda
+              aproximadamente lo mismo que dura el video. Esta página se actualiza sola.
             </p>
           </div>
         </div>
