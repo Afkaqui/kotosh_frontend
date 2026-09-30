@@ -1,9 +1,11 @@
 'use client';
 
-import { Video, BarChart3, PawPrint, Activity, Scale, Stethoscope, CalendarDays } from 'lucide-react';
+import Image from 'next/image';
+import { motion } from 'motion/react';
+import { Video, BarChart3, PawPrint, Activity, Scale, Stethoscope, CalendarDays, Upload } from 'lucide-react';
 import { useDashboardMetrics } from '@/hooks/use-metrics';
 import { useAnimalStats } from '@/hooks/use-animals';
-import PageHeader from '@/components/ui/page-header';
+import { useAuth } from '@/providers/auth-provider';
 import StatCard from '@/components/ui/stat-card';
 import BehaviorPieChart from '@/components/charts/behavior-pie-chart';
 import Badge from '@/components/ui/badge';
@@ -14,17 +16,46 @@ import Link from 'next/link';
 export default function DashboardPage() {
   const { data: metrics, isLoading } = useDashboardMetrics();
   const { data: herd } = useAnimalStats();
+  const { user } = useAuth();
 
   if (isLoading) return <DashboardSkeleton />;
 
   const inTreatment = herd?.byStatus.find((s) => s.status === 'en_tratamiento')?.count ?? 0;
 
+  const firstName = user?.name.split(' ')[0] ?? '';
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
+
   return (
     <div>
-      <PageHeader
-        title="Dashboard"
-        description="Estado del Centro de Producción Kotosh"
-      />
+      <motion.section
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="relative mb-8 overflow-hidden rounded-3xl bg-gray-900 shadow-xl"
+      >
+        <Image src="/img/kotosh-corrales.webp" alt="Corrales del Centro de Producción Kotosh" fill preload sizes="(min-width: 1024px) 75vw, 100vw" className="object-cover opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-green-950/95 via-green-900/75 to-transparent" />
+        <div className="relative flex flex-col gap-5 p-6 sm:p-8 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-sm font-medium capitalize text-green-200">
+              {new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long' })}
+            </p>
+            <h1 className="mt-1 text-2xl font-extrabold text-white sm:text-3xl">
+              {greeting}{firstName ? `, ${firstName}` : ''}
+            </h1>
+            <p className="mt-1 text-sm text-green-100/90">Estado del Centro de Producción Kotosh</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Link href="/animals" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-green-800 shadow transition-transform hover:-translate-y-0.5">
+              <Scale className="h-4 w-4" /> Registrar pesaje
+            </Link>
+            <Link href="/videos/upload" className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur transition-transform hover:-translate-y-0.5">
+              <Upload className="h-4 w-4" /> Subir video
+            </Link>
+          </div>
+        </div>
+      </motion.section>
 
       <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Hato</h2>
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -35,7 +66,7 @@ export default function DashboardPage() {
           value={herd?.averageWeight ? `${herd.averageWeight.toFixed(1)} kg` : '-'}
         />
         <StatCard icon={Stethoscope} label="En tratamiento" value={inTreatment} />
-        <StatCard icon={CalendarDays} label="Último pesaje" value={formatDay(herd?.lastWeighingDate)} />
+        <StatCard icon={CalendarDays} label="Último pesaje" value={formatDay(herd?.lastWeighingDate)} animateValue={false} />
       </div>
 
       <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Visión artificial</h2>
