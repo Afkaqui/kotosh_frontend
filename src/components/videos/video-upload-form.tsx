@@ -6,6 +6,9 @@ import { Upload, X, FileVideo, CheckCircle2 } from 'lucide-react';
 import { useUploadVideo, useAnalyzeVideo } from '@/hooks/use-videos';
 import { formatFileSize } from '@/lib/utils';
 
+// Cloudflare's proxy rejects request bodies over 100 MB.
+const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
+
 export default function VideoUploadForm() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -16,8 +19,20 @@ export default function VideoUploadForm() {
   const uploadVideo = useUploadVideo();
   const analyzeVideo = useAnalyzeVideo();
 
+  const [fileError, setFileError] = useState('');
+
   const handleFile = useCallback((f: File) => {
-    if (!f.type.startsWith('video/')) return;
+    setFileError('');
+    if (!f.type.startsWith('video/')) {
+      setFileError('El archivo no es un video.');
+      return;
+    }
+    if (f.size > MAX_UPLOAD_BYTES) {
+      setFileError(
+        `El video pesa ${formatFileSize(f.size)}; el máximo es 100 MB. Recórtalo a unos minutos o expórtalo en 720p.`,
+      );
+      return;
+    }
     setFile(f);
     setProgress(0);
   }, []);
@@ -76,8 +91,10 @@ export default function VideoUploadForm() {
         <p className="mt-3 text-sm font-medium text-gray-700">
           Arrastra un video aqui o haz clic para seleccionar
         </p>
-        <p className="mt-1 text-xs text-gray-500">MP4, AVI, MOV — Max 500 MB</p>
+        <p className="mt-1 text-xs text-gray-500">MP4, AVI, MOV — máx. 100 MB y 10 minutos</p>
       </div>
+
+      {fileError && <p className="mt-3 text-sm text-red-600">{fileError}</p>}
 
       {file && (
         <div className="mt-4 rounded-xl border border-gray-200 bg-white p-4">
