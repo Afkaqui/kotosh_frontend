@@ -1,6 +1,9 @@
 services:
   kotosh-frontend:
-    build: .
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_API_URL: https://api.sistema-kotosh.com/api
     container_name: kotosh_frontend
     restart: always
     ports:
@@ -8,4 +11,3 @@ services:
     environment:
       - NODE_ENV=production
       - HOSTNAME=0.0.0.0
-      - NEXT_PUBLIC_API_URL=https://api.sistema-kotosh.com/api
