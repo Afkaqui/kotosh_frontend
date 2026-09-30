@@ -7,14 +7,17 @@ import {
   LayoutDashboard,
   Video,
   PawPrint,
+  Users,
   X,
   Menu,
 } from 'lucide-react';
+import { useAuth } from '@/providers/auth-provider';
 
 const navItems = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { label: 'Videos', href: '/videos', icon: Video },
   { label: 'Animales', href: '/animals', icon: PawPrint },
+  { label: 'Usuarios', href: '/users', icon: Users, adminOnly: true },
 ];
 
 interface SidebarProps {
@@ -24,6 +27,11 @@ interface SidebarProps {
 
 export default function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  const visibleItems = navItems.filter(
+    (item) => !('adminOnly' in item && item.adminOnly) || user?.role === 'ADMIN',
+  );
 
   const content = (
     <div className="flex h-full flex-col">
@@ -41,7 +49,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-4">
-        {navItems.map((item) => {
+        {visibleItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + '/');
           return (

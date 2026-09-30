@@ -32,7 +32,7 @@ export default function BehaviorBarChart({
   }
 
   const data = detections.map((d) => ({
-    name: d.label || `Animal #${d.trackId}`,
+    name: d.animal?.tag ?? `Vaca #${d.trackId}`,
     Comiendo: Math.round((d.eatingSeconds / d.totalSeconds) * 100) || 0,
     Descansando: Math.round((d.restingSeconds / d.totalSeconds) * 100) || 0,
     'En movimiento':

@@ -31,6 +31,7 @@ export interface AnalysisSummary {
   avgRestingPct: number;
   avgMovingPct: number;
   totalDurationSeconds: number;
+  classifierMode?: string;
 }
 
 export interface AnimalDetection {
@@ -42,6 +43,8 @@ export interface AnimalDetection {
   restingSeconds: number;
   movingSeconds: number;
   totalSeconds: number;
+  animalId?: string | null;
+  animal?: { id: string; tag: string; name: string | null } | null;
 }
 
 export interface Animal {
@@ -53,7 +56,60 @@ export interface Animal {
   sex: string | null;
   notes: string | null;
   photoUrl: string | null;
+  weight: number | null;
+  status: string | null;
+  weightRecords?: WeightRecord[];
 }
+
+export interface WeightRecord {
+  id: string;
+  animalId: string;
+  weight: number;
+  date: string;
+  notes: string | null;
+}
+
+export interface AnimalStats {
+  totalAnimals: number;
+  activeAnimals: number;
+  inactiveAnimals: number;
+  averageWeight: number;
+  byStatus: { status: string; count: number }[];
+  lastWeighingDate: string | null;
+}
+
+export interface BehaviorHistoryEntry {
+  detectionId: string;
+  analysisId: string;
+  date: string;
+  videoName: string;
+  trackId: number;
+  eatingSeconds: number;
+  restingSeconds: number;
+  movingSeconds: number;
+  totalSeconds: number;
+  eatingPct: number;
+  restingPct: number;
+  movingPct: number;
+}
+
+export const ANIMAL_STATUS_LABELS: Record<string, string> = {
+  activo: 'Activo',
+  en_tratamiento: 'En tratamiento',
+  vendido: 'Vendido',
+  baja: 'Baja',
+};
+
+export type AnimalInput = {
+  tag: string;
+  name?: string;
+  breed?: string;
+  sex?: string;
+  birthDate?: string;
+  notes?: string;
+  status?: string;
+  weight?: number;
+};
 
 export interface DashboardMetrics {
   totalVideos: number;

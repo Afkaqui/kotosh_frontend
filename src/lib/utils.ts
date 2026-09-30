@@ -21,6 +21,28 @@ export function formatDate(isoString: string | null | undefined): string {
   }
 }
 
+// Calendar dates (birth, weighing) must not shift with the viewer's timezone.
+export function formatDay(isoString: string | null | undefined): string {
+  if (!isoString) return '-';
+  const d = new Date(`${isoString.slice(0, 10)}T12:00:00`);
+  return Number.isNaN(+d) ? '-' : format(d, "d 'de' MMM yyyy", { locale: es });
+}
+
+export function todayInput(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+export function ageFrom(isoString: string | null | undefined): string | null {
+  if (!isoString) return null;
+  const birth = new Date(`${isoString.slice(0, 10)}T12:00:00`);
+  const months =
+    (new Date().getFullYear() - birth.getFullYear()) * 12 + new Date().getMonth() - birth.getMonth();
+  if (months < 0) return null;
+  if (months < 24) return `${months} meses`;
+  return `${Math.floor(months / 12)} años ${months % 12 ? `${months % 12} m` : ''}`.trim();
+}
+
 export function formatFileSize(bytes: number | null | undefined): string {
   if (bytes == null || bytes <= 0) return '0 B';
   const units = ['B', 'KB', 'MB', 'GB'];

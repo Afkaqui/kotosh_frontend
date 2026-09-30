@@ -1,27 +1,44 @@
 'use client';
 
-import { Video, BarChart3, PawPrint, Activity } from 'lucide-react';
+import { Video, BarChart3, PawPrint, Activity, Scale, Stethoscope, CalendarDays } from 'lucide-react';
 import { useDashboardMetrics } from '@/hooks/use-metrics';
+import { useAnimalStats } from '@/hooks/use-animals';
 import PageHeader from '@/components/ui/page-header';
 import StatCard from '@/components/ui/stat-card';
 import BehaviorPieChart from '@/components/charts/behavior-pie-chart';
 import Badge from '@/components/ui/badge';
 import Skeleton from '@/components/ui/skeleton';
-import { formatDate } from '@/lib/utils';
+import { formatDate, formatDay } from '@/lib/utils';
 import Link from 'next/link';
 
 export default function DashboardPage() {
   const { data: metrics, isLoading } = useDashboardMetrics();
+  const { data: herd } = useAnimalStats();
 
   if (isLoading) return <DashboardSkeleton />;
+
+  const inTreatment = herd?.byStatus.find((s) => s.status === 'en_tratamiento')?.count ?? 0;
 
   return (
     <div>
       <PageHeader
         title="Dashboard"
-        description="Resumen general de la plataforma KotoshTech"
+        description="Estado del Centro de Producción Kotosh"
       />
 
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Hato</h2>
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard icon={PawPrint} label="Animales activos" value={`${herd?.activeAnimals ?? 0} / ${herd?.totalAnimals ?? 0}`} />
+        <StatCard
+          icon={Scale}
+          label="Peso promedio (activos)"
+          value={herd?.averageWeight ? `${herd.averageWeight.toFixed(1)} kg` : '-'}
+        />
+        <StatCard icon={Stethoscope} label="En tratamiento" value={inTreatment} />
+        <StatCard icon={CalendarDays} label="Último pesaje" value={formatDay(herd?.lastWeighingDate)} />
+      </div>
+
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Visión artificial</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           icon={Video}
@@ -35,7 +52,7 @@ export default function DashboardPage() {
         />
         <StatCard
           icon={PawPrint}
-          label="Animales Detectados"
+          label="Vacas detectadas"
           value={metrics?.totalAnimalsDetected ?? 0}
         />
         <StatCard

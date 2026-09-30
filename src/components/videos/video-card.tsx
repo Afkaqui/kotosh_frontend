@@ -1,17 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { Video, Play, Trash2 } from 'lucide-react';
+import { Video, Play, Trash2, RotateCcw } from 'lucide-react';
 import type { Video as VideoType } from '@/lib/types';
 import Badge from '@/components/ui/badge';
 import { formatDate, formatFileSize, formatDuration } from '@/lib/utils';
 import { useDeleteVideo, useAnalyzeVideo } from '@/hooks/use-videos';
+import { useAuth } from '@/providers/auth-provider';
 
 interface VideoCardProps {
   video: VideoType;
 }
 
 export default function VideoCard({ video }: VideoCardProps) {
+  const { can } = useAuth();
   const deleteVideo = useDeleteVideo();
   const analyzeVideo = useAnalyzeVideo();
 
@@ -38,6 +40,16 @@ export default function VideoCard({ video }: VideoCardProps) {
         </div>
 
         <div className="mt-3 flex gap-2">
+          {latestAnalysis?.status === 'ERROR' && (
+            <button
+              onClick={() => analyzeVideo.mutate(video.id)}
+              disabled={analyzeVideo.isPending}
+              title="Reintentar análisis"
+              className="flex items-center justify-center gap-1 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700 disabled:opacity-50"
+            >
+              <RotateCcw className="h-3 w-3" />
+            </button>
+          )}
           {latestAnalysis ? (
             <Link
               href={`/analysis/${latestAnalysis.id}`}
@@ -55,15 +67,17 @@ export default function VideoCard({ video }: VideoCardProps) {
               Analizar
             </button>
           )}
-          <button
-            onClick={() => {
-              if (confirm('Eliminar este video?')) deleteVideo.mutate(video.id);
-            }}
-            disabled={deleteVideo.isPending}
-            className="rounded-lg border border-gray-200 px-2 py-1.5 text-gray-400 hover:border-red-200 hover:text-red-500 disabled:opacity-50"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-          </button>
+          {can('ADMIN', 'ENCARGADO') && (
+            <button
+              onClick={() => {
+                if (confirm('¿Eliminar este video y sus análisis?')) deleteVideo.mutate(video.id);
+              }}
+              disabled={deleteVideo.isPending}
+              className="rounded-lg border border-gray-200 px-2 py-1.5 text-gray-400 hover:border-red-200 hover:text-red-500 disabled:opacity-50"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
       </div>
     </div>

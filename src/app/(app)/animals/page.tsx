@@ -7,17 +7,20 @@ import PageHeader from '@/components/ui/page-header';
 import EmptyState from '@/components/ui/empty-state';
 import Skeleton from '@/components/ui/skeleton';
 import AnimalTable from '@/components/animals/animal-table';
+import { useAuth } from '@/providers/auth-provider';
 
 export default function AnimalsPage() {
   const { data: animals, isLoading } = useAnimals();
+  const { can } = useAuth();
+  const canEdit = can('ADMIN', 'ENCARGADO');
 
   return (
     <div>
       <PageHeader
         title="Animales"
-        description="Registro de animales monitoreados"
+        description="Registro del hato: identificación, peso y estado"
         action={
-          <Link
+          canEdit && <Link
             href="/animals/new"
             className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-green-700"
           >
@@ -33,9 +36,9 @@ export default function AnimalsPage() {
         <EmptyState
           icon={PawPrint}
           title="No hay animales registrados"
-          description="Registra tus animales para asociarlos con las detecciones del analisis."
+          description="Registra los animales para asociarlos con las detecciones del análisis."
           action={
-            <Link
+            canEdit && <Link
               href="/animals/new"
               className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-green-700"
             >

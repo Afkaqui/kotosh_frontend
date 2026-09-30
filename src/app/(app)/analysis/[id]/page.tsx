@@ -3,7 +3,8 @@
 import { use } from 'react';
 import { ArrowLeft, Clock, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useAnalysis } from '@/hooks/use-analyses';
+import { useAnalysis, useAssignDetection } from '@/hooks/use-analyses';
+import { useAnimals } from '@/hooks/use-animals';
 import PageHeader from '@/components/ui/page-header';
 import Badge from '@/components/ui/badge';
 import Skeleton from '@/components/ui/skeleton';
@@ -19,6 +20,8 @@ export default function AnalysisDetailPage({
 }) {
   const { id } = use(params);
   const { data: analysis, isLoading } = useAnalysis(id);
+  const { data: animals } = useAnimals();
+  const assign = useAssignDetection(id);
 
   if (isLoading) {
     return (
@@ -65,7 +68,8 @@ export default function AnalysisDetailPage({
           <div>
             <p className="text-sm font-medium text-blue-800">Procesando video...</p>
             <p className="text-xs text-blue-600">
-              {analysis.processedFrames ?? 0} / {analysis.totalFrames ?? '?'} frames
+              Se analizan 2 fotogramas por segundo; un video de 5 minutos tarda aproximadamente 1 a 3 minutos.
+              Esta página se actualiza sola.
             </p>
           </div>
         </div>
@@ -101,6 +105,22 @@ export default function AnalysisDetailPage({
 
       {analysis.summary && <DetectionSummary summary={analysis.summary} />}
 
+      {analysis.status === 'COMPLETED' && !analysis.detections?.length && (
+        <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          No se detectaron vacas en este video. Verifica que el encuadre muestre a los animales completos y con
+          buena iluminación.
+        </div>
+      )}
+
+      {analysis.summary?.classifierMode && analysis.summary.classifierMode !== 'yolo-cls' && (
+        <p className="mt-4 text-xs text-gray-400">
+          Clasificación de comportamiento:{' '}
+          {analysis.summary.classifierMode === 'clip-zero-shot'
+            ? 'movimiento por desplazamiento del animal + postura por modelo visual CLIP (sin entrenamiento específico del hato).'
+            : 'heurística de respaldo (baja precisión).'}
+        </p>
+      )}
+
       {analysis.detections && analysis.detections.length > 0 && (
         <>
           <div className="mt-6">
@@ -108,14 +128,22 @@ export default function AnalysisDetailPage({
           </div>
 
           <div className="mt-6">
-            <h3 className="mb-4 text-base font-semibold text-gray-900">
-              Detalle por Animal
-            </h3>
+            <h3 className="text-base font-semibold text-gray-900">Detalle por animal</h3>
+            <p className="mb-4 mt-0.5 text-sm text-gray-500">
+              Asigna cada vaca detectada a su arete para acumular su historial de comportamiento.
+            </p>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {analysis.detections.map((detection) => (
-                <AnimalBehaviorCard key={detection.id} detection={detection} />
+                <AnimalBehaviorCard
+                  key={detection.id}
+                  detection={detection}
+                  animals={animals}
+                  assigning={assign.isPending}
+                  onAssign={(animalId) => assign.mutate({ detectionId: detection.id, animalId })}
+                />
               ))}
             </div>
+            {assign.isError && <p className="mt-2 text-sm text-red-600">{assign.error.message}</p>}
           </div>
         </>
       )}

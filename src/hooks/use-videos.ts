@@ -8,9 +8,11 @@ export function useVideos() {
   return useQuery<Video[]>({
     queryKey: ['videos'],
     queryFn: async () => {
-      const { data } = await api.get('/videos');
-      return data;
+      const { data } = await api.get('/videos', { params: { take: 100 } });
+      return data.data;
     },
+    refetchInterval: (query) =>
+      query.state.data?.some((v) => v.status === 'PROCESSING') ? 5000 : false,
   });
 }
 
