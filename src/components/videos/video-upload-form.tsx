@@ -89,7 +89,7 @@ export default function VideoUploadForm() {
         />
         <Upload className="mx-auto h-10 w-10 text-gray-400" />
         <p className="mt-3 text-sm font-medium text-gray-700">
-          Arrastra un video aqui o haz clic para seleccionar
+          Arrastra un video aquí o haz clic para seleccionar
         </p>
         <p className="mt-1 text-xs text-gray-500">MP4, AVI, MOV — máx. 100 MB y 10 minutos</p>
       </div>
@@ -131,7 +131,7 @@ export default function VideoUploadForm() {
           {uploadVideo.isSuccess && (
             <div className="mt-3 flex items-center gap-2 text-green-600">
               <CheckCircle2 className="h-4 w-4" />
-              <p className="text-sm">Video subido y analisis iniciado</p>
+              <p className="text-sm">Video subido y análisis iniciado</p>
             </div>
           )}
 
@@ -146,7 +146,7 @@ export default function VideoUploadForm() {
               onClick={handleUpload}
               className="mt-4 w-full rounded-lg bg-green-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-green-700"
             >
-              Subir y Analizar
+              Subir y analizar
             </button>
           )}
         </div>

@@ -35,7 +35,7 @@ export default function VideoCard({ video }: VideoCardProps) {
 
         <div className="mt-2 space-y-1 text-xs text-gray-500">
           <p>{formatFileSize(video.size)}</p>
-          {video.duration && <p>Duracion: {formatDuration(video.duration)}</p>}
+          {video.duration && <p>Duración: {formatDuration(video.duration)}</p>}
           <p>{formatDate(video.uploadedAt)}</p>
         </div>
 
@@ -55,7 +55,7 @@ export default function VideoCard({ video }: VideoCardProps) {
               href={`/analysis/${latestAnalysis.id}`}
               className="flex-1 rounded-lg border border-gray-200 px-3 py-1.5 text-center text-xs font-medium text-gray-700 hover:bg-gray-50"
             >
-              Ver Analisis
+              Ver análisis
             </Link>
           ) : (
             <button

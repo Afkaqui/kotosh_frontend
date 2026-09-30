@@ -39,7 +39,7 @@ export default function AnalysisDetailPage({
   if (!analysis) {
     return (
       <div className="py-16 text-center">
-        <p className="text-gray-500">Analisis no encontrado</p>
+        <p className="text-gray-500">Análisis no encontrado</p>
         <Link href="/videos" className="mt-2 text-sm text-green-600 hover:underline">
           Volver a videos
         </Link>
@@ -58,7 +58,7 @@ export default function AnalysisDetailPage({
       </Link>
 
       <PageHeader
-        title={`Analisis #${analysis.id.slice(0, 8)}`}
+        title={`Análisis #${analysis.id.slice(0, 8)}`}
         action={<Badge status={analysis.status} />}
       />
 
@@ -77,7 +77,7 @@ export default function AnalysisDetailPage({
 
       {analysis.status === 'ERROR' && (
         <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-          <p className="text-sm font-medium text-red-800">Error en el analisis</p>
+          <p className="text-sm font-medium text-red-800">Error en el análisis</p>
           <p className="text-xs text-red-600">{analysis.errorMessage || 'Error desconocido'}</p>
         </div>
       )}

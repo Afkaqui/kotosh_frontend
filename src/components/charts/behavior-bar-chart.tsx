@@ -45,7 +45,13 @@ export default function BehaviorBarChart({
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical">
             <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-            <XAxis type="number" domain={[0, 100]} unit="%" />
+            <XAxis
+              type="number"
+              domain={[0, 100]}
+              ticks={[0, 25, 50, 75, 100]}
+              allowDataOverflow
+              unit="%"
+            />
             <YAxis
               type="category"
               dataKey="name"

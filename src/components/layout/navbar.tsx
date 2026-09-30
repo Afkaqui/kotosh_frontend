@@ -19,8 +19,8 @@ const pageTitles: Record<string, string> = {
 
 function getPageTitle(pathname: string): string {
   if (pageTitles[pathname]) return pageTitles[pathname];
-  if (pathname.startsWith('/analysis/')) return 'Detalle de Analisis';
-  if (pathname.startsWith('/animals/')) return 'Detalle de Animal';
+  if (pathname.startsWith('/analysis/')) return 'Detalle de análisis';
+  if (pathname.startsWith('/animals/')) return 'Detalle de animal';
   return 'KotoshTech';
 }
 
@@ -61,7 +61,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
             <button
               onClick={logout}
               className="rounded-md p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-              title="Cerrar sesion"
+              title="Cerrar sesión"
             >
               <LogOut className="h-4 w-4" />
             </button>

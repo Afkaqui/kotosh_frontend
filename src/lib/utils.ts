@@ -21,11 +21,17 @@ export function formatDate(isoString: string | null | undefined): string {
   }
 }
 
-// Calendar dates (birth, weighing) must not shift with the viewer's timezone.
+// Calendar dates are sent as local noon, so the local date is stable in any American timezone.
 export function formatDay(isoString: string | null | undefined): string {
   if (!isoString) return '-';
-  const d = new Date(`${isoString.slice(0, 10)}T12:00:00`);
+  const d = new Date(isoString);
   return Number.isNaN(+d) ? '-' : format(d, "d 'de' MMM yyyy", { locale: es });
+}
+
+export function toDateInput(isoString: string | null | undefined): string {
+  if (!isoString) return '';
+  const d = new Date(isoString);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 export function todayInput(): string {
@@ -35,7 +41,7 @@ export function todayInput(): string {
 
 export function ageFrom(isoString: string | null | undefined): string | null {
   if (!isoString) return null;
-  const birth = new Date(`${isoString.slice(0, 10)}T12:00:00`);
+  const birth = new Date(isoString);
   const months =
     (new Date().getFullYear() - birth.getFullYear()) * 12 + new Date().getMonth() - birth.getMonth();
   if (months < 0) return null;

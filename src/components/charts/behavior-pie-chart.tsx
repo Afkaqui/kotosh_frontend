@@ -32,7 +32,7 @@ export default function BehaviorPieChart({
 
   if (total === 0) {
     return (
-      <ChartCard title="Distribucion de Comportamiento">
+      <ChartCard title="Distribución de comportamiento">
         <div className="flex h-64 items-center justify-center text-sm text-gray-400">
           Sin datos disponibles
         </div>
@@ -41,7 +41,7 @@ export default function BehaviorPieChart({
   }
 
   return (
-    <ChartCard title="Distribucion de Comportamiento">
+    <ChartCard title="Distribución de comportamiento">
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

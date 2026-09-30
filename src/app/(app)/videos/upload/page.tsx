@@ -8,7 +8,7 @@ export default function UploadVideoPage() {
     <div>
       <PageHeader
         title="Subir Video"
-        description="Sube un video de monitoreo ganadero para su analisis"
+        description="Sube un video de monitoreo ganadero para su análisis"
       />
       <VideoUploadForm />
     </div>

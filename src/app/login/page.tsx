@@ -44,7 +44,7 @@ export default function LoginPage() {
           </div>
           <h1 className="mt-4 text-2xl font-bold text-gray-900">KotoshTech</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Plataforma de gestion ganadera
+            Plataforma de gestión ganadera
           </p>
         </div>
 
@@ -53,7 +53,7 @@ export default function LoginPage() {
           className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
         >
           <h2 className="mb-6 text-lg font-semibold text-gray-900">
-            Iniciar sesion
+            Iniciar sesión
           </h2>
 
           {error && (
@@ -67,7 +67,7 @@ export default function LoginPage() {
               htmlFor="email"
               className="mb-1.5 block text-sm font-medium text-gray-700"
             >
-              Correo electronico
+              Correo electrónico
             </label>
             <input
               id="email"
@@ -85,7 +85,7 @@ export default function LoginPage() {
               htmlFor="password"
               className="mb-1.5 block text-sm font-medium text-gray-700"
             >
-              Contrasena
+              Contraseña
             </label>
             <input
               id="password"
@@ -108,7 +108,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-xs text-gray-400">
-          UNHEVAL - Centro de Produccion Kotosh
+          UNHEVAL - Centro de Producción Kotosh
         </p>
       </div>
     </div>

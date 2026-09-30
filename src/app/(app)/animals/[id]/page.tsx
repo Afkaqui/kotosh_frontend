@@ -14,7 +14,7 @@ import {
 } from '@/hooks/use-animals';
 import { useAuth } from '@/providers/auth-provider';
 import { ANIMAL_STATUS_LABELS, type Animal } from '@/lib/types';
-import { ageFrom, formatDate, formatDay, formatDuration, todayInput } from '@/lib/utils';
+import { ageFrom, formatDate, formatDay, formatDuration, toDateInput, todayInput } from '@/lib/utils';
 import Skeleton from '@/components/ui/skeleton';
 import StatusPill from '@/components/animals/status-pill';
 import WeightChart, { weightSummary } from '@/components/animals/weight-chart';
@@ -343,7 +343,7 @@ function EditAnimalForm({ animal, onDone }: { animal: Animal; onDone: () => void
     name: animal.name ?? '',
     breed: animal.breed ?? '',
     sex: animal.sex ?? '',
-    birthDate: animal.birthDate?.slice(0, 10) ?? '',
+    birthDate: toDateInput(animal.birthDate),
     status: animal.status ?? 'activo',
     notes: animal.notes ?? '',
   });

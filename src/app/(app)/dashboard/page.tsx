@@ -47,7 +47,7 @@ export default function DashboardPage() {
         />
         <StatCard
           icon={BarChart3}
-          label="Analisis"
+          label="Análisis"
           value={metrics?.totalAnalyses ?? 0}
         />
         <StatCard
@@ -57,7 +57,7 @@ export default function DashboardPage() {
         />
         <StatCard
           icon={Activity}
-          label="Comportamiento Promedio"
+          label="Comportamiento promedio"
           value={
             metrics?.avgBehavior
               ? `${metrics.avgBehavior.eating.toFixed(0)}% comiendo`
@@ -75,11 +75,11 @@ export default function DashboardPage() {
 
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
           <h3 className="mb-4 text-base font-semibold text-gray-900">
-            Analisis Recientes
+            Análisis recientes
           </h3>
           {!metrics?.recentAnalyses?.length ? (
             <p className="py-8 text-center text-sm text-gray-400">
-              No hay analisis recientes
+              No hay análisis recientes
             </p>
           ) : (
             <div className="space-y-3">
@@ -91,7 +91,7 @@ export default function DashboardPage() {
                 >
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-gray-900">
-                      Analisis #{analysis.id.slice(0, 8)}
+                      Análisis #{analysis.id.slice(0, 8)}
                     </p>
                     <p className="text-xs text-gray-500">
                       {formatDate(analysis.startedAt)}

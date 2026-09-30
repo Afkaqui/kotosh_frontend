@@ -93,7 +93,7 @@ export default function UsersPage() {
             <input
               required
               type="email"
-              placeholder="Correo electronico"
+              placeholder="Correo electrónico"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:ring-1 focus:ring-green-500 focus:outline-none"

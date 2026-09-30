@@ -37,7 +37,7 @@ export default function VideosPage() {
         <EmptyState
           icon={VideoIcon}
           title="No hay videos"
-          description="Sube tu primer video para comenzar el analisis de comportamiento ganadero."
+          description="Sube tu primer video para comenzar el análisis de comportamiento ganadero."
           action={
             <Link
               href="/videos/upload"

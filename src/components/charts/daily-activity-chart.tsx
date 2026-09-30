@@ -62,7 +62,7 @@ export default function DailyActivityChart({
               dataKey="analisis"
               stroke="#16a34a"
               fill="url(#colorAnalisis)"
-              name="Analisis"
+              name="Análisis"
             />
           </AreaChart>
         </ResponsiveContainer>

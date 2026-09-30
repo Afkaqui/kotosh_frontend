@@ -29,7 +29,14 @@ export default function BehaviorHistoryChart({ entries }: { entries: BehaviorHis
         <BarChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-          <YAxis domain={[0, 100]} unit="%" width={48} tick={{ fontSize: 12 }} />
+          <YAxis
+            domain={[0, 100]}
+            ticks={[0, 25, 50, 75, 100]}
+            allowDataOverflow
+            unit="%"
+            width={48}
+            tick={{ fontSize: 12 }}
+          />
           <Tooltip formatter={(v) => `${v}%`} />
           <Legend />
           <Bar dataKey="Comiendo" stackId="a" fill={BEHAVIOR_COLORS.eating} />
